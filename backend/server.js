@@ -6,7 +6,14 @@ const { PORT } = require("./config/env");
 
 const app = express();
 
-app.use(cors());
+// Reflect request Origin so deployed frontends (any HTTPS URL) are allowed
+app.use(
+  cors({
+    origin: true,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
@@ -15,8 +22,8 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/reminders", reminderRoutes);
 
-app.listen(PORT, () => {
-  console.log(`[backend] running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`[backend] listening on port ${PORT}`);
   startReminderJob();
 });
 

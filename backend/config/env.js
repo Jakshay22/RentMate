@@ -3,7 +3,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 module.exports = {
-  PORT: process.env.BACKEND_PORT || 8787,
+  // Render/Railway/etc. set PORT; local dev can use BACKEND_PORT
+  PORT: Number(process.env.PORT || process.env.BACKEND_PORT || 8787),
   SUPABASE_URL: process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
   TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID || "",

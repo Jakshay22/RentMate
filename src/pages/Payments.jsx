@@ -54,8 +54,9 @@ export default function Payments() {
       alert(
         `Reminder attempts: ${items.length}. WhatsApp messages actually sent: ${delivered}.\n\n${detail}\n\nTip: use full international numbers (e.g. +91…). Twilio’s sandbox only delivers after the recipient joins the sandbox.`
       );
-    } catch {
-      alert("Failed to trigger reminders.");
+    } catch (err) {
+      const msg = err?.message || "Failed to trigger reminders.";
+      alert(msg);
     }
   };
 
