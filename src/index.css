@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* RentMate — green SaaS design tokens */
+:root {
+  --rm-primary: #16a34a;
+  --rm-secondary: #22c55e;
+  --rm-bg: #f0fdf4;
+  --rm-card: #ffffff;
+  --rm-border: #e5e7eb;
+  --rm-text: #111827;
+  --rm-text-muted: #6b7280;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--rm-text);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
