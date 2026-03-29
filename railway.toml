@@ -1,0 +1,10 @@
+# Express API — do not use Nixpacks’ Vite+Caddy static mode.
+# Set service variables in Railway: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, TWILIO_*, PORT (optional).
+# https://docs.railway.com/reference/config-as-code
+
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "node backend/server.js"
+restartPolicyType = "ON_FAILURE"

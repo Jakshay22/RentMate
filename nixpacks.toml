@@ -1,0 +1,12 @@
+# Prevent Nixpacks from treating this repo as a Vite SPA served by Caddy (which would ignore Express).
+# https://nixpacks.com/docs/providers/node
+
+[variables]
+NIXPACKS_SPA_CADDY = "false"
+
+# API does not need `vite build`; skip it so deploy stays fast and never depends on Vite env at build time.
+[phases.build]
+cmds = ["echo 'Skipping Vite build (backend-only service)'"]
+
+[start]
+cmd = "node backend/server.js"
