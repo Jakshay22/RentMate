@@ -3,6 +3,14 @@ import axios from "axios";
 const API_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:8787";
 
 function reminderErrorMessage(error) {
+  const status = error?.response?.status;
+  if (status === 405) {
+    return [
+      "405 Method Not Allowed: the reminder URL is not your Express backend.",
+      "Set VITE_BACKEND_URL to the server where backend/server.js runs (e.g. Render/Railway URL),",
+      "not your frontend site (Vercel/Netlify). Rebuild the frontend after changing it."
+    ].join(" ");
+  }
   const data = error?.response?.data;
   if (data && typeof data.error === "string") return data.error;
   if (data && typeof data.message === "string") return data.message;

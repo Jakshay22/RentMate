@@ -36,7 +36,9 @@ const sendWhatsApp = async ({ toPhone, message }) => {
 
     return {
       sent: true,
-      sid: result.sid
+      sid: result.sid,
+      // queued/sent/delivered/… — "sent" in our API only means Twilio accepted the request
+      status: result.status
     };
   } catch (err) {
     const msg = err?.message || String(err);

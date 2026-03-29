@@ -43,7 +43,10 @@ export default function Payments() {
       const detail = items
         .map((i) => {
           const w = i.whatsapp || {};
-          if (w.sent) return `• ${i.reminder_type}: WhatsApp sent (Twilio).`;
+          if (w.sent) {
+            const st = w.status ? ` Twilio status: ${w.status}.` : "";
+            return `• ${i.reminder_type}: Twilio accepted the message.${st} That means queued/accepted—not guaranteed on-device yet.`;
+          }
           if (w.skipped) {
             const extra = w.error ? ` ${w.error}` : "";
             return `• ${i.reminder_type}: not sent — ${w.reason || "skipped"}${extra}`;
