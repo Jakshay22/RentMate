@@ -16,6 +16,10 @@ app.use(
 );
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+  res.json({ ok: true, service: "rentmate-backend", health: "/health", reminders: "POST /api/reminders/send" });
+});
+
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "rentmate-backend" });
 });
