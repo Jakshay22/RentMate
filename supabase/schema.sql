@@ -74,3 +74,9 @@ drop policy if exists "reminder_logs_insert_own" on public.reminder_logs;
 
 create policy "reminder_logs_select_own" on public.reminder_logs for select using (auth.uid() = user_id);
 create policy "reminder_logs_insert_own" on public.reminder_logs for insert with check (auth.uid() = user_id);
+
+-- Public read-only access (so visitors can view dashboard/tenants/payments without login).
+-- Anonymous users (anon) have auth.uid() = null, so we add `using (true)` select policies.
+create policy "tenants_select_public" on public.tenants for select using (true);
+create policy "payments_select_public" on public.payments for select using (true);
+create policy "reminder_logs_select_public" on public.reminder_logs for select using (true);

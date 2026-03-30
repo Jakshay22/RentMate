@@ -14,7 +14,7 @@ export default function PaymentTable({ userId, refreshKey = 0 }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (userId) fetchPayments();
+    fetchPayments();
   }, [userId, refreshKey]);
 
   const fetchPayments = async () => {
@@ -131,13 +131,15 @@ export default function PaymentTable({ userId, refreshKey = 0 }) {
                   <td className="px-5 py-4">
                     <button
                       type="button"
-                      disabled={isPaid}
+                      disabled={isPaid || !userId}
                       onClick={() => handleMarkPaid(p.id)}
                       className={[
                         "inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200",
                         isPaid
                           ? "cursor-not-allowed bg-gray-100 text-gray-400"
-                          : "bg-green-600 text-white shadow-sm hover:bg-green-700"
+                          : !userId
+                            ? "cursor-not-allowed bg-gray-100 text-gray-400"
+                            : "bg-green-600 text-white shadow-sm hover:bg-green-700"
                       ].join(" ")}
                     >
                       {isPaid ? "Paid" : "Mark as paid"}

@@ -5,10 +5,8 @@ import TenantList from "../components/tenant/TenantList";
 import TenantForm from "../components/tenant/TenantForm";
 import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
-import { useAuthContext } from "../context/AuthContext";
 
 export default function Tenants() {
-  const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -26,13 +24,12 @@ export default function Tenants() {
           </Button>
         </div>
 
-        <TenantList userId={user?.id} refreshKey={refreshKey} />
+        <TenantList refreshKey={refreshKey} />
 
         <Modal isOpen={open} onClose={() => setOpen(false)}>
           <div className="max-w-md">
             <h3 className="mb-4 text-lg font-semibold text-[#111827]">New tenant</h3>
             <TenantForm
-              userId={user?.id}
               onSuccess={() => {
                 setOpen(false);
                 setRefreshKey((k) => k + 1);

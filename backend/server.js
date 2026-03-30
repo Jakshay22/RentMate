@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const reminderRoutes = require("./routes/reminderRoutes");
+const publicTenantRoutes = require("./routes/publicTenantRoutes");
 const { startReminderJob } = require("./jobs/reminderJob");
 const { PORT } = require("./config/env");
 
@@ -25,6 +26,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/reminders", reminderRoutes);
+app.use("/api/public", publicTenantRoutes);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`[backend] listening on port ${PORT}`);

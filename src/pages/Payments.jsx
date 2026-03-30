@@ -5,7 +5,6 @@ import PaymentTable from "../components/payment/PaymentTable";
 import { useAuthContext } from "../context/AuthContext";
 import { createMonthlyPayments, syncPaymentStatuses } from "../services/paymentServices";
 import { getTenants } from "../services/tenantServices";
-import { triggerReminder } from "../services/reminderServices";
 import Button from "../components/ui/Button";
 
 export default function Payments() {
@@ -29,38 +28,9 @@ export default function Payments() {
   };
 
   const handleSendReminders = async () => {
-    if (!user?.id) return;
-    try {
-      const data = await triggerReminder(user.id);
-      const items = data?.result ?? [];
-      const delivered = data?.whatsappSent ?? items.filter((i) => i.whatsapp?.sent).length;
-      if (items.length === 0) {
-        alert(
-          "No reminders ran. Usually this means today is not within the reminder window for your tenants’ due dates, or there are no unpaid payments for this month."
-        );
-        return;
-      }
-      const detail = items
-        .map((i) => {
-          const w = i.whatsapp || {};
-          if (w.sent) {
-            const st = w.status ? ` Twilio status: ${w.status}.` : "";
-            return `• ${i.reminder_type}: Twilio accepted the message.${st} That means queued/accepted—not guaranteed on-device yet.`;
-          }
-          if (w.skipped) {
-            const extra = w.error ? ` ${w.error}` : "";
-            return `• ${i.reminder_type}: not sent — ${w.reason || "skipped"}${extra}`;
-          }
-          return `• ${i.reminder_type}: unknown delivery status`;
-        })
-        .join("\n");
-      alert(
-        `Reminder attempts: ${items.length}. WhatsApp messages actually sent: ${delivered}.\n\n${detail}\n\nTip: use full international numbers (e.g. +91…). Twilio’s sandbox only delivers after the recipient joins the sandbox.`
-      );
-    } catch (err) {
-      const msg = err?.message || "Failed to trigger reminders.";
-      alert(msg);
-    }
+    // Public/anonymous usage should not be able to trigger WhatsApp sends.
+    // If you want to re-enable for admins later, we can add an allow-list/secret.
+    alert("Temporarily removed feature because of security reasons");
   };
 
   return (
@@ -72,10 +42,12 @@ export default function Payments() {
             <p className="mt-1 text-sm text-[#6b7280]">Status is based on paid flag and due date for each month.</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button type="button" variant="secondary" onClick={handleGenerateMonth}>
-              <CalendarPlus className="h-4 w-4" strokeWidth={2} />
-              Generate this month
-            </Button>
+            {user?.id ? (
+              <Button type="button" variant="secondary" onClick={handleGenerateMonth}>
+                <CalendarPlus className="h-4 w-4" strokeWidth={2} />
+                Generate this month
+              </Button>
+            ) : null}
             <Button type="button" variant="primary" onClick={handleSendReminders}>
               <MessageCircle className="h-4 w-4" strokeWidth={2} />
               Send reminders

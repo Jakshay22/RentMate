@@ -4,32 +4,15 @@ const { runDailyRemindersForUser, runDailyRemindersForAllUsers } = require("../s
 const router = express.Router();
 
 router.post("/send", async (req, res) => {
-  try {
-    const { userId } = req.body || {};
-    if (!userId) return res.status(400).json({ error: "userId is required" });
-    const result = await runDailyRemindersForUser(userId);
-    const whatsappSent = result.filter((r) => r.whatsapp?.sent).length;
-    return res.json({
-      ok: true,
-      sent: result.length,
-      attempts: result.length,
-      whatsappSent,
-      result
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: error.message || "Failed to send reminders" });
-  }
+  return res.status(403).json({
+    error: "Temporarily removed because of security reason"
+  });
 });
 
 router.post("/run-all", async (_req, res) => {
-  try {
-    const result = await runDailyRemindersForAllUsers();
-    return res.json({ ok: true, result });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: error.message || "Failed to run reminders" });
-  }
+  return res.status(403).json({
+    error: "Temporarily removed because of security reason"
+  });
 });
 
 module.exports = router;

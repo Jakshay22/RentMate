@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import AppLayout from "../components/layout/AppLayout";
 import TenantList from "../components/tenant/TenantList";
-import { useAuthContext } from "../context/AuthContext";
 import useDashboardStats from "../hooks/useDashboardStats";
 
 function StatCard({ label, value, sub, icon: Icon }) {
@@ -29,8 +28,7 @@ function StatCard({ label, value, sub, icon: Icon }) {
 }
 
 export default function Dashboard() {
-  const { user } = useAuthContext();
-  const { stats, loading } = useDashboardStats(user?.id);
+  const { stats, loading } = useDashboardStats();
 
   return (
     <AppLayout>
@@ -77,7 +75,7 @@ export default function Dashboard() {
 
         <div>
           <h2 className="mb-4 text-lg font-semibold text-[#111827]">Tenants</h2>
-          <TenantList userId={user?.id} />
+          <TenantList />
         </div>
       </div>
     </AppLayout>

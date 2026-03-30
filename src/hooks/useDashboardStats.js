@@ -18,11 +18,6 @@ export default function useDashboardStats(userId) {
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
-    if (!userId) {
-      setStats(initial);
-      setLoading(false);
-      return;
-    }
     setLoading(true);
     try {
       const [tenants, payments] = await Promise.all([

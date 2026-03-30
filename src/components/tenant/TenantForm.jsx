@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
-import { addTenant } from "../../services/tenantServices";
+import { addPublicTenant } from "../../services/publicTenantServices";
 
-export default function TenantForm({ onSuccess, userId }) {
+export default function TenantForm({ onSuccess }) {
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -20,10 +20,6 @@ export default function TenantForm({ onSuccess, userId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userId) {
-      alert("Please login first.");
-      return;
-    }
 
     const rentAmount = Number.parseFloat(form.rent_amount);
     if (!Number.isFinite(rentAmount) || rentAmount <= 0) {
@@ -40,8 +36,7 @@ export default function TenantForm({ onSuccess, userId }) {
     }
 
     try {
-      await addTenant({
-        user_id: userId,
+      await addPublicTenant({
         name: form.name.trim(),
         phone: form.phone.trim(),
         rent_amount: rentAmount,
@@ -53,6 +48,7 @@ export default function TenantForm({ onSuccess, userId }) {
       onSuccess();
     } catch (err) {
       const msg =
+        err?.response?.data?.error ||
         err?.message ||
         err?.error_description ||
         err?.hint ||

@@ -5,10 +5,13 @@ import { dueDateForBillingMonth } from "../utils/paymentStatus";
 const TENANT_SELECT = "name, due_date, property_name, property_address";
 
 export const getPayments = async (userId) => {
-  const { data, error } = await supabase
+  let query = supabase
     .from("payments")
-    .select(`*, tenants(${TENANT_SELECT})`)
-    .eq("user_id", userId)
+    .select(`*, tenants(${TENANT_SELECT})`);
+  // Public mode: allow anonymous visitors to read demo data (no user filter).
+  if (userId) query = query.eq("user_id", userId);
+
+  const { data, error } = await query
     .order("year", { ascending: false })
     .order("month", { ascending: false });
   if (error) throw error;

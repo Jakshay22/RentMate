@@ -11,7 +11,6 @@ export default function TenantList({ userId, refreshKey = 0 }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) return;
     let cancelled = false;
     (async () => {
       setLoading(true);

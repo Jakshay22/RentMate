@@ -15,11 +15,24 @@ function reminderErrorMessage(error) {
   if (data && typeof data.error === "string") return data.error;
   if (data && typeof data.message === "string") return data.message;
   if (error?.code === "ERR_NETWORK" || error?.message === "Network Error") {
-    return [
+    const usingLocalhost = String(API_BASE).includes("localhost");
+    const mixedContent =
+      typeof window !== "undefined" &&
+      window.location?.protocol === "https:" &&
+      String(API_BASE).startsWith("http:");
+    const bits = [
       "Cannot reach the reminder API.",
-      "Set VITE_BACKEND_URL to your deployed backend URL (https://…), rebuild the frontend,",
-      "and ensure the backend is running with SUPABASE_SERVICE_ROLE_KEY."
-    ].join(" ");
+      `This build calls: ${API_BASE}`,
+      usingLocalhost
+        ? "VITE_BACKEND_URL was probably not set when the site was built (Vite bakes it in at build time)."
+        : null,
+      mixedContent
+        ? "Use an https:// backend URL — an https:// page cannot call http:// (browser blocks it)."
+        : null,
+      "In Vercel/hosting: add VITE_BACKEND_URL=https://your-railway-app.up.railway.app (no path), then redeploy the frontend.",
+      "Backend must be running (Railway/Render) with SUPABASE_SERVICE_ROLE_KEY set."
+    ].filter(Boolean);
+    return bits.join(" ");
   }
   if (error?.message) return error.message;
   return "Request failed.";

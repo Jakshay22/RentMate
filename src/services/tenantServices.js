@@ -1,10 +1,11 @@
 import { supabase } from "./supabaseClient";
 
 export const getTenants = async (userId) => {
-  const { data, error } = await supabase
-    .from("tenants")
-    .select("*")
-    .eq("user_id", userId);
+  let query = supabase.from("tenants").select("*");
+  // Public mode: allow anonymous visitors to read demo data (no user filter).
+  if (userId) query = query.eq("user_id", userId);
+
+  const { data, error } = await query;
   if (error) throw error;
   return data;
 };
